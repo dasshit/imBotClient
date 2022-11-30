@@ -1,4 +1,4 @@
-module imBotClient
+module github.com/dasshit/imBotClient
 
 go 1.19
 
