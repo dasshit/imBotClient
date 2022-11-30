@@ -1,12 +1,16 @@
 package imBotClient
 
-import "github.com/valyala/fasthttp"
+import (
+	"github.com/valyala/fasthttp"
+	"github.com/valyala/fastjson"
+)
 
 type Client struct {
 	Token      string
 	ApiBaseUrl string `default:"https://api.icq.net/bot/v1"`
 	ParseMode  string `default:"HTML"`
 	HttpClient *fasthttp.Client
+	JsonParser fastjson.Parser
 }
 
 func NewClient(token string) Client {
@@ -16,9 +20,17 @@ func NewClient(token string) Client {
 	return client
 }
 
-func (bot Client) selfGet() string {
+func (bot Client) GetReq(path string) {
+
+}
+
+func (bot Client) selfGet() *fastjson.Value {
+
 	req := fasthttp.AcquireRequest()
 	req.SetRequestURI(bot.ApiBaseUrl + "/self/get")
+
+	query := req.URI().QueryArgs()
+	query.Add("token", bot.Token)
 
 	resp := fasthttp.AcquireResponse()
 	err := bot.HttpClient.Do(req, resp)
@@ -26,6 +38,10 @@ func (bot Client) selfGet() string {
 		panic(err)
 	}
 
-	bodyBytes := resp.Body()
-	return string(bodyBytes)
+	jsonBody, err := bot.JsonParser.ParseBytes(resp.Body())
+	if err != nil {
+		panic(err)
+	}
+
+	return jsonBody
 }
