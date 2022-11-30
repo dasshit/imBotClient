@@ -24,7 +24,7 @@ func (bot Client) GetReq(path string) {
 
 }
 
-func (bot Client) selfGet() *fastjson.Value {
+func (bot Client) SelfGet() *fastjson.Value {
 
 	req := fasthttp.AcquireRequest()
 	req.SetRequestURI(bot.ApiBaseUrl + "/self/get")
