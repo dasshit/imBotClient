@@ -16,12 +16,9 @@ type Client struct {
 func NewClient(token string) Client {
 	client := Client{}
 	client.Token = token
-	client.HttpClient = &fasthttp.Client{}
+	client.ApiBaseUrl = "https://api.icq.net/bot/v1"
+	client.ParseMode = "HTML"
 	return client
-}
-
-func (bot Client) GetReq(path string) {
-
 }
 
 func (bot Client) SelfGet() *fastjson.Value {
